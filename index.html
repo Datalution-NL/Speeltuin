@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OVH Competitie</title>
+  <meta name="description" content="Competitiestand van OVH: punten, doelpunten en uitslagen per speeldag.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%235fb078'/%3E%3Ctext x='16' y='21' font-size='14' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'%3EOVH%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+  <header class="top">
+    <h1>OVH Competitie <small id="seizoen"></small></h1>
+    <nav class="tabs">
+      <a href="#stand" data-view="stand">Stand</a>
+      <a href="#speeldagen" data-view="speeldagen">Speeldagen</a>
+      <a href="#invoer" data-view="invoer" id="tab-invoer">Invoer</a>
+      <a href="#instellingen" data-view="instellingen">Instellingen</a>
+    </nav>
+  </header>
+
+  <main>
+    <div id="melding" class="melding verborgen"></div>
+
+    <!-- STAND -->
+    <section class="view" id="view-stand">
+      <div class="kaart">
+        <h2>Stand</h2>
+        <p class="stil" id="stand-info"></p>
+        <table class="stand">
+          <thead>
+            <tr>
+              <th>#</th><th>Speler</th><th>G</th>
+              <th class="optioneel">W</th><th class="optioneel">G</th><th class="optioneel">V</th>
+              <th>DV</th><th>DT</th><th>+/-</th><th>Pnt</th>
+            </tr>
+          </thead>
+          <tbody id="stand-body"></tbody>
+        </table>
+        <p class="stil">G = gespeeld, W/G/V = winst/gelijk/verlies, DV/DT = doelpunten voor/tegen. Tik op een speler voor de punten per speeldag. Winst 3, gelijk 1, verlies 0.</p>
+      </div>
+      <div class="kaart" id="laatste-uitslag"></div>
+    </section>
+
+    <!-- SPEELDAGEN -->
+    <section class="view" id="view-speeldagen">
+      <div class="kaart">
+        <h2>Speeldagen</h2>
+        <ul class="speeldagen" id="speeldagen-lijst"></ul>
+      </div>
+    </section>
+
+    <!-- INVOER -->
+    <section class="view" id="view-invoer">
+      <div class="kaart" id="invoer-geen-token">
+        <h2>Invoer</h2>
+        <p>Uitslagen invoeren kan alleen als beheerder. Zet je GitHub-token onder <a href="#instellingen">Instellingen</a>.</p>
+      </div>
+
+      <div id="invoer-editor" hidden>
+        <div class="stappen">
+          <span data-stap="1">1 Speeldag</span><span data-stap="2">2 Teams</span><span data-stap="3">3 Controleren</span><span data-stap="4">4 Uitslag</span>
+        </div>
+
+        <!-- Stap 1 + 2 -->
+        <div class="kaart" id="stap-teams">
+          <h2 id="invoer-titel">Nieuwe uitslag</h2>
+          <label class="veld">Speeldag
+            <select id="invoer-datum"></select>
+          </label>
+          <h3>Teams aanleveren</h3>
+          <div class="opties">
+            <div class="optie">
+              <h3>📷 Afbeelding uit Shake</h3>
+              <p class="stil">Upload de gedeelde teamafbeelding; de namen worden automatisch gelezen.</p>
+              <input type="file" id="invoer-afbeelding" accept="image/*">
+              <div class="voortgang" id="ocr-voortgang" hidden><div></div></div>
+              <p class="stil" id="ocr-status"></p>
+            </div>
+            <div class="optie">
+              <h3>📋 Tekst of CSV plakken</h3>
+              <p class="stil">Gebruik in Shake <em>Share Teams as Text</em> of <em>as CSV</em> en plak het hier.</p>
+              <textarea id="invoer-tekst" placeholder="Rood&#10;Bas&#10;Dave&#10;…&#10;Blauw&#10;Hilbert&#10;…"></textarea>
+              <div class="rij-knoppen">
+                <button type="button" id="knop-tekst">Tekst verwerken</button>
+                <button type="button" class="secundair" id="knop-leeg">Handmatig samenstellen</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stap 3 -->
+        <div class="kaart" id="stap-controle" hidden>
+          <h2>Controleren en corrigeren</h2>
+          <p class="stil">Klopt de indeling niet (meer)? Verplaats, verwijder of voeg spelers toe. Gele namen zijn onzeker herkend.</p>
+          <div class="teams-editor" id="teams-editor"></div>
+          <div class="rij-knoppen">
+            <button type="button" class="secundair" id="knop-terug-teams">← Andere upload</button>
+            <button type="button" id="knop-naar-score">Naar uitslag →</button>
+          </div>
+        </div>
+
+        <!-- Stap 4 -->
+        <div class="kaart" id="stap-score" hidden>
+          <h2>Uitslag</h2>
+          <div class="score-invoer">
+            <span class="label" id="score-label-a">Rood</span>
+            <input type="number" min="0" inputmode="numeric" id="score-a" class="rood">
+            <span class="streep">–</span>
+            <input type="number" min="0" inputmode="numeric" id="score-b" class="blauw">
+            <span class="label" id="score-label-b">Blauw</span>
+          </div>
+          <label class="veld">Opmerking (optioneel)
+            <input type="text" id="invoer-opmerking" placeholder="bijv. Theo laatste 10 minuten gewisseld naar Blauw">
+          </label>
+          <div class="samenvatting" id="score-samenvatting"></div>
+          <div id="invoer-fouten" class="melding fout verborgen"></div>
+          <div class="rij-knoppen">
+            <button type="button" class="secundair" id="knop-terug-controle">← Teams aanpassen</button>
+            <button type="button" id="knop-opslaan">Opslaan en stand bijwerken</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INSTELLINGEN -->
+    <section class="view" id="view-instellingen">
+      <div class="kaart">
+        <h2>Beheerder</h2>
+        <p class="stil">Met een GitHub-token kan deze telefoon/computer uitslagen opslaan. Het token blijft alleen in deze browser staan.</p>
+        <label class="veld">GitHub-token
+          <input type="password" id="token-invoer" autocomplete="off" placeholder="github_pat_…">
+        </label>
+        <div class="rij-knoppen">
+          <button type="button" id="knop-token-opslaan">Token opslaan en testen</button>
+          <button type="button" class="secundair" id="knop-token-wissen">Token verwijderen</button>
+        </div>
+        <p class="stil" id="token-status"></p>
+      </div>
+
+      <div class="kaart" id="spelers-kaart">
+        <h2>Spelers</h2>
+        <ul class="roster" id="spelers-lijst"></ul>
+        <div class="toevoegen">
+          <input type="text" id="nieuwe-speler" placeholder="Nieuwe speler">
+          <button type="button" id="knop-speler-toevoegen">Toevoegen</button>
+        </div>
+        <p class="stil">Gasten die je bij een wedstrijd invoert komen automatisch in de stand; wil je ze vast in de lijst, voeg ze hier toe.</p>
+      </div>
+
+      <div class="kaart">
+        <h2>Data</h2>
+        <p class="stil">Alle gegevens staan in <code>data/competitie.json</code> in de GitHub-repository. Handig als back-up:</p>
+        <div class="rij-knoppen">
+          <button type="button" class="secundair" id="knop-export">Download JSON</button>
+          <button type="button" class="secundair" id="knop-export-csv">Download stand als CSV</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>OVH Competitie · <span id="bron-info"></span></footer>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

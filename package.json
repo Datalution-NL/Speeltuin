@@ -1,0 +1,11 @@
+{
+  "name": "ovh-competitie",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Competitiestand voor OVH: teams uploaden, uitslag invoeren, stand automatisch bijgewerkt.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8080"
+  }
+}

@@ -1,0 +1,184 @@
+:root {
+  --groen: #5fb078;
+  --groen-donker: #2f6b45;
+  --rood: #ff4d4d;
+  --rood-donker: #b3001b;
+  --blauw: #2255ff;
+  --blauw-donker: #1c2fb3;
+  --tekst: #1d2b22;
+  --tekst-licht: #5b6a61;
+  --achtergrond: #f4f7f5;
+  --kaart: #ffffff;
+  --rand: #d9e2dc;
+  --waarschuwing: #fff4d6;
+  --waarschuwing-rand: #e2b93b;
+  --fout: #c62828;
+  --ok: #2e7d32;
+  --radius: 14px;
+  --schaduw: 0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--tekst);
+  background: var(--achtergrond);
+  line-height: 1.45;
+}
+button, input, select, textarea { font: inherit; }
+
+header.top {
+  background: var(--groen);
+  color: #fff;
+  padding: 12px 16px 0;
+  box-shadow: var(--schaduw);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+header.top h1 {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+header.top h1 small { font-weight: 400; opacity: 0.9; font-size: 0.85rem; }
+nav.tabs { display: flex; gap: 4px; overflow-x: auto; }
+nav.tabs a {
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 12px 10px;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  opacity: 0.85;
+}
+nav.tabs a.actief { border-bottom-color: #fff; opacity: 1; font-weight: 600; }
+nav.tabs a.verborgen { display: none; }
+
+main { max-width: 760px; margin: 0 auto; padding: 16px; }
+section.view { display: none; }
+section.view.actief { display: block; }
+
+.kaart {
+  background: var(--kaart);
+  border-radius: var(--radius);
+  box-shadow: var(--schaduw);
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+.kaart h2 { margin: 0 0 8px; font-size: 1.05rem; }
+.kaart h3 { margin: 12px 0 6px; font-size: 0.95rem; color: var(--tekst-licht); text-transform: uppercase; letter-spacing: 0.04em; }
+p.stil { color: var(--tekst-licht); margin: 4px 0; font-size: 0.92rem; }
+
+.melding { padding: 10px 12px; border-radius: 10px; margin: 10px 0; font-size: 0.95rem; }
+.melding.info { background: #e6f1ea; color: var(--groen-donker); }
+.melding.waarschuwing { background: var(--waarschuwing); border: 1px solid var(--waarschuwing-rand); }
+.melding.fout { background: #fdecea; color: var(--fout); }
+.melding.ok { background: #e8f5e9; color: var(--ok); }
+.melding.verborgen { display: none; }
+
+/* Stand */
+table.stand { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+table.stand th, table.stand td { padding: 8px 6px; text-align: right; border-bottom: 1px solid var(--rand); }
+table.stand th { font-size: 0.75rem; color: var(--tekst-licht); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
+table.stand th:nth-child(2), table.stand td:nth-child(2) { text-align: left; width: 100%; }
+table.stand td.pos { color: var(--tekst-licht); }
+table.stand td.punten { font-weight: 700; font-size: 1.05rem; }
+table.stand tr.rij { cursor: pointer; }
+table.stand tr.rij:nth-child(-n+3) td.pos { color: var(--groen-donker); font-weight: 700; }
+table.stand tr.detail td { background: #fafcfb; padding: 6px 8px 10px; text-align: left; }
+table.stand .gast { color: var(--tekst-licht); font-size: 0.8rem; margin-left: 4px; }
+.dagpunten { display: flex; flex-wrap: wrap; gap: 4px; }
+.dagpunten span { font-size: 0.75rem; padding: 2px 6px; border-radius: 6px; background: #eef2ef; color: var(--tekst-licht); }
+.dagpunten span.p3 { background: #dcefdf; color: var(--ok); font-weight: 600; }
+.dagpunten span.p1 { background: #fff1c9; color: #8a6d00; font-weight: 600; }
+.dagpunten span.p0 { background: #fde2e1; color: var(--fout); }
+@media (max-width: 480px) {
+  table.stand th.optioneel, table.stand td.optioneel { display: none; }
+}
+
+/* Speeldagen */
+ul.speeldagen { list-style: none; padding: 0; margin: 0; }
+ul.speeldagen li { padding: 10px 0; border-bottom: 1px solid var(--rand); display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; }
+ul.speeldagen li .datum { min-width: 120px; font-weight: 600; }
+ul.speeldagen li .score { font-variant-numeric: tabular-nums; }
+ul.speeldagen li .open { color: var(--tekst-licht); font-style: italic; }
+ul.speeldagen li .acties { margin-left: auto; display: flex; gap: 6px; }
+ul.speeldagen li .teams { flex-basis: 100%; font-size: 0.88rem; color: var(--tekst-licht); }
+.teamlabel { display: inline-block; padding: 1px 7px; border-radius: 6px; color: #fff; font-size: 0.8rem; margin-right: 4px; background: #6b7b70; }
+.teamlabel.rood { background: var(--rood-donker); }
+.teamlabel.blauw { background: var(--blauw-donker); }
+
+/* Knoppen en formulieren */
+button, .knop {
+  background: var(--groen-donker);
+  color: #fff;
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-weight: 600;
+}
+button.secundair { background: #e8ede9; color: var(--tekst); }
+button.klein { padding: 5px 10px; font-size: 0.85rem; font-weight: 500; }
+button.gevaar { background: #fdecea; color: var(--fout); }
+button:disabled { opacity: 0.5; cursor: default; }
+.rij-knoppen { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+label.veld { display: block; margin: 10px 0; font-size: 0.92rem; color: var(--tekst-licht); }
+label.veld > input, label.veld > select, label.veld > textarea {
+  display: block; width: 100%; margin-top: 4px; padding: 10px; border: 1px solid var(--rand); border-radius: 10px; background: #fff; color: var(--tekst);
+}
+textarea { min-height: 120px; font-family: ui-monospace, Menlo, monospace; font-size: 0.9rem; }
+input[type="file"] { padding: 8px; }
+.stappen { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+.stappen span { font-size: 0.8rem; padding: 4px 10px; border-radius: 999px; background: #e8ede9; color: var(--tekst-licht); }
+.stappen span.actief { background: var(--groen-donker); color: #fff; }
+.opties { display: grid; gap: 10px; grid-template-columns: 1fr; }
+@media (min-width: 560px) { .opties { grid-template-columns: 1fr 1fr; } }
+.optie { border: 1px solid var(--rand); border-radius: 12px; padding: 12px; }
+.optie h3 { margin: 0 0 6px; text-transform: none; letter-spacing: 0; color: var(--tekst); }
+.voortgang { height: 6px; background: #e8ede9; border-radius: 3px; overflow: hidden; margin-top: 8px; }
+.voortgang div { height: 100%; background: var(--groen); width: 0; transition: width 0.2s; }
+.ocr-voorbeeld { max-width: 100%; max-height: 220px; border: 1px solid var(--rand); border-radius: 8px; margin-top: 8px; }
+
+/* Teameditor */
+.teams-editor { display: grid; gap: 12px; grid-template-columns: 1fr; }
+@media (min-width: 560px) { .teams-editor { grid-template-columns: 1fr 1fr; } }
+.team-kaart { border-radius: 12px; padding: 10px; border: 2px solid var(--rand); }
+.team-kaart.rood { border-color: var(--rood); background: #fff2f2; }
+.team-kaart.blauw { border-color: var(--blauw); background: #eef2ff; }
+.team-kaart .kop { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.team-kaart .kop input { flex: 1; font-weight: 700; font-size: 1.05rem; padding: 6px 8px; border: 1px solid var(--rand); border-radius: 8px; background: #fff; }
+.team-kaart .kop .aantal { color: var(--tekst-licht); font-size: 0.85rem; }
+ul.spelerslijst { list-style: none; margin: 0; padding: 0; }
+ul.spelerslijst li { display: flex; align-items: center; gap: 6px; padding: 5px 0; border-bottom: 1px dashed rgba(0,0,0,0.08); }
+ul.spelerslijst li .naam { flex: 1; }
+ul.spelerslijst li.onzeker .naam { color: #8a6d00; }
+ul.spelerslijst li.onbekend { background: var(--waarschuwing); border-radius: 8px; padding: 6px; flex-wrap: wrap; }
+ul.spelerslijst li.onbekend .naam { flex-basis: 100%; }
+ul.spelerslijst li select { padding: 4px 6px; border-radius: 8px; border: 1px solid var(--rand); max-width: 100%; }
+ul.spelerslijst li button { padding: 4px 8px; font-size: 0.85rem; background: #fff; color: var(--tekst); border: 1px solid var(--rand); font-weight: 500; }
+.toevoegen { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.toevoegen select, .toevoegen input { flex: 1; min-width: 120px; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--rand); background: #fff; }
+.toevoegen button { padding: 6px 10px; }
+
+.score-invoer { display: flex; align-items: center; gap: 10px; justify-content: center; margin: 12px 0; }
+.score-invoer input { width: 80px; font-size: 1.8rem; text-align: center; padding: 6px; border-radius: 10px; border: 2px solid var(--rand); }
+.score-invoer input.rood { border-color: var(--rood); }
+.score-invoer input.blauw { border-color: var(--blauw); }
+.score-invoer .streep { font-size: 1.6rem; color: var(--tekst-licht); }
+.score-invoer .label { font-weight: 700; min-width: 60px; text-align: center; }
+
+.samenvatting { font-size: 0.95rem; }
+.samenvatting strong { font-size: 1.1rem; }
+
+/* Instellingen */
+ul.roster { list-style: none; padding: 0; margin: 0; columns: 2; column-gap: 16px; }
+ul.roster li { break-inside: avoid; padding: 4px 0; display: flex; gap: 6px; align-items: center; }
+ul.roster li .naam { flex: 1; }
+code { background: #eef2ef; padding: 1px 5px; border-radius: 5px; font-size: 0.9em; }
+footer { text-align: center; color: var(--tekst-licht); font-size: 0.8rem; padding: 20px 0; }
